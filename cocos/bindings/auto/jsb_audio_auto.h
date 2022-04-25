@@ -30,6 +30,8 @@ SE_DECLARE_FUNC(js_audio_AudioEngine_setLoop);
 SE_DECLARE_FUNC(js_audio_AudioEngine_isLoop);
 SE_DECLARE_FUNC(js_audio_AudioEngine_setVolume);
 SE_DECLARE_FUNC(js_audio_AudioEngine_getVolume);
+SE_DECLARE_FUNC(js_audio_AudioEngine_setPlaybackRate);
+SE_DECLARE_FUNC(js_audio_AudioEngine_getPlaybackRate);
 SE_DECLARE_FUNC(js_audio_AudioEngine_pause);
 SE_DECLARE_FUNC(js_audio_AudioEngine_pauseAll);
 SE_DECLARE_FUNC(js_audio_AudioEngine_resume);

@@ -233,7 +233,7 @@ static bool js_audio_AudioEngine_play2d(se::State& s) // NOLINT(readability-iden
         HolderType<std::string, true> arg0 = {};
         HolderType<bool, false> arg1 = {};
         HolderType<float, false> arg2 = {};
-        HolderType<const cc::AudioProfile*, false> arg3 = {};
+        HolderType<float, false> arg3 = {};
         ok &= sevalue_to_native(args[0], &arg0, nullptr);
         ok &= sevalue_to_native(args[1], &arg1, nullptr);
         ok &= sevalue_to_native(args[2], &arg2, nullptr);
@@ -245,7 +245,25 @@ static bool js_audio_AudioEngine_play2d(se::State& s) // NOLINT(readability-iden
         SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
         return true;
     }
-    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 4);
+    if (argc == 5) {
+        HolderType<std::string, true> arg0 = {};
+        HolderType<bool, false> arg1 = {};
+        HolderType<float, false> arg2 = {};
+        HolderType<float, false> arg3 = {};
+        HolderType<const cc::AudioProfile*, false> arg4 = {};
+        ok &= sevalue_to_native(args[0], &arg0, nullptr);
+        ok &= sevalue_to_native(args[1], &arg1, nullptr);
+        ok &= sevalue_to_native(args[2], &arg2, nullptr);
+        ok &= sevalue_to_native(args[3], &arg3, nullptr);
+        ok &= sevalue_to_native(args[4], &arg4, nullptr);
+        SE_PRECONDITION2(ok, false, "js_audio_AudioEngine_play2d : Error processing arguments");
+        int result = cc::AudioEngine::play2d(arg0.value(), arg1.value(), arg2.value(), arg3.value(), arg4.value());
+        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
+        SE_PRECONDITION2(ok, false, "js_audio_AudioEngine_play2d : Error processing arguments");
+        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 5);
     return false;
 }
 SE_BIND_FUNC(js_audio_AudioEngine_play2d)
@@ -327,6 +345,45 @@ static bool js_audio_AudioEngine_getVolume(se::State& s) // NOLINT(readability-i
     return false;
 }
 SE_BIND_FUNC(js_audio_AudioEngine_getVolume)
+
+static bool js_audio_AudioEngine_setPlaybackRate(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 2) {
+        HolderType<int, false> arg0 = {};
+        HolderType<float, false> arg1 = {};
+        ok &= sevalue_to_native(args[0], &arg0, nullptr);
+        ok &= sevalue_to_native(args[1], &arg1, nullptr);
+        SE_PRECONDITION2(ok, false, "js_audio_AudioEngine_setPlaybackRate : Error processing arguments");
+        cc::AudioEngine::setPlaybackRate(arg0.value(), arg1.value());
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 2);
+    return false;
+}
+SE_BIND_FUNC(js_audio_AudioEngine_setPlaybackRate)
+
+static bool js_audio_AudioEngine_getPlaybackRate(se::State& s) // NOLINT(readability-identifier-naming)
+{
+    const auto& args = s.args();
+    size_t argc = args.size();
+    CC_UNUSED bool ok = true;
+    if (argc == 1) {
+        HolderType<int, false> arg0 = {};
+        ok &= sevalue_to_native(args[0], &arg0, nullptr);
+        SE_PRECONDITION2(ok, false, "js_audio_AudioEngine_getPlaybackRate : Error processing arguments");
+        float result = cc::AudioEngine::getPlaybackRate(arg0.value());
+        ok &= nativevalue_to_se(result, s.rval(), nullptr /*ctx*/);
+        SE_PRECONDITION2(ok, false, "js_audio_AudioEngine_getPlaybackRate : Error processing arguments");
+        SE_HOLD_RETURN_VALUE(result, s.thisObject(), s.rval());
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 1);
+    return false;
+}
+SE_BIND_FUNC(js_audio_AudioEngine_getPlaybackRate)
 
 static bool js_audio_AudioEngine_pause(se::State& s) // NOLINT(readability-identifier-naming)
 {
@@ -795,6 +852,8 @@ bool js_register_audio_AudioEngine(se::Object* obj) // NOLINT(readability-identi
     cls->defineStaticFunction("isLoop", _SE(js_audio_AudioEngine_isLoop));
     cls->defineStaticFunction("setVolume", _SE(js_audio_AudioEngine_setVolume));
     cls->defineStaticFunction("getVolume", _SE(js_audio_AudioEngine_getVolume));
+    cls->defineStaticFunction("setPlaybackRate", _SE(js_audio_AudioEngine_setPlaybackRate));
+    cls->defineStaticFunction("getPlaybackRate", _SE(js_audio_AudioEngine_getPlaybackRate));
     cls->defineStaticFunction("pause", _SE(js_audio_AudioEngine_pause));
     cls->defineStaticFunction("pauseAll", _SE(js_audio_AudioEngine_pauseAll));
     cls->defineStaticFunction("resume", _SE(js_audio_AudioEngine_resume));
