@@ -243,7 +243,7 @@ int AudioEngineImpl::play2d(const std::string &filePath, bool loop, float volume
                 }
             });
 
-            _audioPlayerProvider->setPlaybackRate(playbackRate);
+            // _audioPlayerProvider->setPlaybackRate(playbackRate);
             player->setLoop(loop);
             player->setVolume(volume);
             player->setPlaybackRate(playbackRate);

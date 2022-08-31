@@ -68,7 +68,7 @@ static AudioFileIndicator gAudioFileIndicator[] = {
     {"default", 128000}, // If we could not handle the audio format, return default value, the position should be first.
     {".wav", 1024000},
     {".ogg", 128000},
-    {".mp3", 160000}};
+    {".mp3", 1600000}};
 
 AudioPlayerProvider::AudioPlayerProvider(SLEngineItf engineItf, SLObjectItf outputMixObject,
                                          int deviceSampleRate, int bufferSizeInFrames,
