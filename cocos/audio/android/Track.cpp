@@ -70,10 +70,10 @@ float Track::getVolume() const {
 }
 
 void Track::setPlaybackRate(float playbackRate) {
-    // std::lock_guard<std::mutex> lk(_volumeDirtyMutex);
+//     std::lock_guard<std::mutex> pk(_playbackRateDirtyMutex);
     if (fabs(_playbackRate - playbackRate) > 0.00001) {
         _playbackRate = playbackRate;
-        // setVolumeDirty(true);
+        setPlaybackRateDirty(true);
     }
 }
 

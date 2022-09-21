@@ -81,6 +81,10 @@ private:
 
     inline void setVolumeDirty(bool isDirty) { _isVolumeDirty = isDirty; };
 
+    inline bool isPlaybackRateDirty() const { return _isPlaybackRateDirty; };
+    
+    inline void setPlaybackRateDirty(bool isDirty) { _isPlaybackRateDirty = isDirty; };
+
     inline bool isInitialized() const { return _isInitialized; };
 
     inline void setInitialized(bool isInitialized) { _isInitialized = isInitialized; };
@@ -92,9 +96,11 @@ private:
     std::mutex _stateMutex;
     int _name;
     float _volume;
-    float _playbackRate;
     bool _isVolumeDirty;
+    float _playbackRate;
+    bool _isPlaybackRateDirty;
     std::mutex _volumeDirtyMutex;
+    std::mutex _playbackRateDirtyMutex;
     bool _isLoop;
     bool _isInitialized;
     bool _isAudioFocus;

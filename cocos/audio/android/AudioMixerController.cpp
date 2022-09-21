@@ -131,10 +131,14 @@ void AudioMixerController::initTrack(Track *track, std::vector<Track *> &tracksT
         _mixer->setParameter(name, AudioMixer::VOLUME, AudioMixer::VOLUME0, &lVolume);
         _mixer->setParameter(name, AudioMixer::VOLUME, AudioMixer::VOLUME1, &rVolume);
 
+        track->setVolumeDirty(false);
+
+//        std::lock_guard<std::mutex> pk(track->_playbackRateDirtyMutex);
         float playbackRate = track->getPlaybackRate();
         _mixer->setParameter(name, AudioMixer::TIMESTRETCH, AudioMixer::PLAYBACK_RATE, &playbackRate);
 
-        track->setVolumeDirty(false);
+        track->setPlaybackRateDirty(false);
+
         track->setInitialized(true);
     }
 }
@@ -197,11 +201,18 @@ void AudioMixerController::mixOneFrame() {
                 _mixer->setParameter(name, AudioMixer::VOLUME, AudioMixer::VOLUME0, &lVolume);
                 _mixer->setParameter(name, AudioMixer::VOLUME, AudioMixer::VOLUME1, &rVolume);
 
-                float playbackRate = track->getPlaybackRate();
-                _mixer->setParameter(name, AudioMixer::TIMESTRETCH, AudioMixer::PLAYBACK_RATE, &playbackRate);
-
                 track->setVolumeDirty(false);
             }
+
+//            std::lock_guard<std::mutex> pk(track->_playbackRateDirtyMutex);
+            if (track->isPlaybackRateDirty())
+            {
+                float playbackRate = track->getPlaybackRate();
+                _mixer->setParameter(name, AudioMixer::TIMESTRETCH, AudioMixer::PLAYBACK_RATE, &playbackRate);
+                
+                track->setPlaybackRateDirty(false);
+            }
+            
         } else if (state == Track::State::RESUMED) {
             initTrack(track, tracksToRemove);
 
